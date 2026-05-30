@@ -1,4 +1,4 @@
-package silva.samuel.lojapoo.model;
+package silva.samuel.lojapoo.model.autor;
 
 public class Autor {
     private String nome;

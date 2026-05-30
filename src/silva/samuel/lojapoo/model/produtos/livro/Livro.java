@@ -1,29 +1,46 @@
 package silva.samuel.lojapoo.model.produtos.livro;
 
-import silva.samuel.lojapoo.model.Autor;
+import silva.samuel.lojapoo.model.autor.Autor;
 import silva.samuel.lojapoo.model.produtos.Produto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract  class Livro extends Produto {
     private String titulo;
-    private String descricao;
-    private int quantidade;
-    private Autor autor;
+    private List<Autor> autores;
 
-    public Livro(Autor autor) {
-        this.autor = autor;
-        this.quantidade = 0;
+    //Construtor para adição de apenas um autor
+    public Livro(String titulo, int codigo, double valorUnitario, Autor autor) {
+        super(titulo, codigo, valorUnitario);
+        this.autores = new ArrayList<>();
+        adicionarAutor(autor);
     }
 
+    //Construtor para adição de mais de um autor
+    public Livro(String titulo, int codigo, double valorUnitario, List<Autor> autores) {
+        super(titulo, codigo, valorUnitario);
+        this.autores = new ArrayList<>();
+        this.autores.addAll(autores);
+    }
+
+
+
+    //Métodos
     @Override
-    public String toString() {
-        return "\n" + " Título: " + getTitulo() + "\n" +
-                " Descricao: " + getDescricao() + "\n" +
-                " Tipo: " + getTipo() + "\n" +
-                " Autor: " + getAutor().getNome() + "\n" +
-                " Quantidade: " + getQuantidade() + "\n" +
-                " Preço: " + getPreco() + "\n" ;
+    public boolean calcularDesconto(double porcentagem) {
+        if (porcentagem > 0.3) return false;
+
+        double desconto = getValorUnitario() *  porcentagem;
+        this.setValorUnitario(getValorUnitario() - desconto);
+
+        return true;
     }
 
+
+
+
+    //Métodos Getters e Setters
     public String getTitulo() {
         return titulo;
     }
@@ -32,43 +49,19 @@ public abstract  class Livro extends Produto {
         this.titulo = titulo;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public List<Autor> getAutores() {
+        return  this.autores;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setAutores(List<Autor> autores) {
+        this.autores = autores;
     }
 
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public Autor getAutor() {
-        return autor;
-    }
-
-    public void setAutor(Autor autor) {
-        this.autor = autor;
-    }
-
-    @Override
-    public boolean calcularDesconto(double porcentagem) {
-        if (porcentagem > 0.3) return false;
-
-       double desconto = getPreco() *  porcentagem;
-       this.setPreco(getPreco() - desconto);
-
-       return true;
-    }
+    public void adicionarAutor(Autor autor) {
+        this.autores.add(autor);
+    };
 
     public String getTipo(){
         return "Livro";
     }
-
-
 }

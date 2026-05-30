@@ -6,20 +6,39 @@ import java.util.List;
 
 
 public class Carrinho {
-    private final List<Produto> carrinho = new ArrayList<>();;
+    private final List<ItemCarrinho> itensCarrinho;
     private double valorTotal;
 
 
-    public String toString() {
-        return  carrinho.toString() + "Preço total do carrinho: " + getValorTotal();
+
+    public Carrinho() {
+        this.itensCarrinho = new ArrayList<>();
     }
 
-    public void add(Produto produto){
-        carrinho.add(produto); //Método add() utilizado da Java Collections
-        setValorTotal(produto.getPreco());
+    public List<ItemCarrinho> getItensCarrinho() {
+        return this.itensCarrinho;
+    }
+
+    public void adicionarItem(Produto produto, int quantidade){
+        for (ItemCarrinho itemCarrinho : itensCarrinho) {
+            if (itemCarrinho.getProduto().getCodigo() == produto.getCodigo()) {
+                itemCarrinho.setQuantidade(itemCarrinho.getQuantidade() + quantidade);
+                return;
+            }
+        }
+
+        ItemCarrinho novoItem = new ItemCarrinho(produto, quantidade);
+        itensCarrinho.add(novoItem);
+    }
+
+    public void removerItemDoCarrinho(Produto produto){
+        this.itensCarrinho.removeIf(item -> item.getProduto().getCodigo() == produto.getCodigo());
     }
 
     public double getValorTotal(){
+        for (ItemCarrinho item : itensCarrinho) {
+           setValorTotal(item.getSubtotal());
+        }
         return this.valorTotal;
     }
 
@@ -28,7 +47,7 @@ public class Carrinho {
     }
 
     public int getTamanhoCarrinho(){
-        return carrinho.size();
+        return itensCarrinho.size();
     }
 
 
